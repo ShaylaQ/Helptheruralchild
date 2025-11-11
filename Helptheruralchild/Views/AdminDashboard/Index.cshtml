@@ -1,0 +1,35 @@
+﻿@{
+    Layout = "_DashboardLayout";
+    ViewData["Title"] = "Admin Dashboard";
+    ViewBag.Role = "Admin";
+}
+
+<div class="container">
+    <h3 class="fw-bold mb-4">Welcome, Admin </h3>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card p-4 shadow-sm border-0">
+                <i class="bi bi-box-seam fs-1 text-primary mb-3"></i>
+                <h5>Manage Donations</h5>
+                <p class="text-muted small">Review and approve submitted donations.</p>
+                <a asp-controller="Donation" asp-action="Index" class="btn btn-primary btn-sm">View</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 shadow-sm border-0">
+                <i class="bi bi-truck fs-1 text-success mb-3"></i>
+                <h5>Manage Pickups</h5>
+                <p class="text-muted small">Assign and monitor drivers.</p>
+                <a asp-controller="Pickup" asp-action="Index" class="btn btn-success btn-sm">Manage</a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 shadow-sm border-0">
+                <i class="bi bi-bar-chart-line fs-1 text-warning mb-3"></i>
+                <h5>Reports</h5>
+                <p class="text-muted small">View statistics and donation reports.</p>
+                <a asp-controller="Reports" asp-action="Index" class="btn btn-warning text-white btn-sm">Open</a>
+            </div>
+        </div>
+    </div>
+</div>

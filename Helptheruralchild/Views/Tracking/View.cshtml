@@ -1,0 +1,53 @@
+﻿
+@model IEnumerable<Helptheruralchild.Models.TrackingPoint>
+
+@{
+    ViewData["Title"] = "Track Driver";
+}
+
+<h2>Live Driver Location</h2>
+
+<div id="map" style="height:500px;width:100%;"></div>
+
+@section Scripts {
+    <script async
+            src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+    </script>
+
+    <script>
+        let map, marker;
+
+        function initMap() {
+            const defaultLocation = { lat: -33.9249, lng: 18.4241 }; // Cape Town default
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 12,
+                center: defaultLocation
+            });
+
+            marker = new google.maps.Marker({
+                position: defaultLocation,
+                map: map,
+                title: "Driver Location"
+            });
+
+            // Refresh location every 5 seconds
+            setInterval(fetchLocation, 5000);
+        }
+
+        function fetchLocation() {
+            fetch(window.location.href)
+                .then(res => res.text())
+                .then(data => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(data, "text/html");
+                    const lat = parseFloat(doc.querySelector("td[data-lat]").getAttribute("data-lat"));
+                    const lng = parseFloat(doc.querySelector("td[data-lng]").getAttribute("data-lng"));
+
+                    const newPos = { lat, lng };
+                    marker.setPosition(newPos);
+                    map.setCenter(newPos);
+                })
+                .catch(err => console.error("Error updating map:", err));
+        }
+    </script>
+}

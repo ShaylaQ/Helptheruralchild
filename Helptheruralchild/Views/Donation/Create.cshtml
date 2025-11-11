@@ -1,0 +1,18 @@
+﻿@model Helptheruralchild.Models.Donation
+<h2>Create Donation</h2>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label>Type:</label>
+        <input asp-for="Type" required />
+    </div>
+    <div>
+        <label>Description:</label>
+        <textarea asp-for="Description" required></textarea>
+    </div>
+    <div>
+        <label>Payment Method:</label>
+        <input asp-for="PaymentMethod" />
+    </div>
+    <button type="submit">Submit Donation</button>
+</form>
