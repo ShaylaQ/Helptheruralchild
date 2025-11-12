@@ -16,16 +16,15 @@ namespace Helptheruralchild.Controllers
         public IActionResult Index()
         {
             var email = HttpContext.Session.GetString("UserEmail");
-            if (string.IsNullOrEmpty(email))
+            if (email == null)
                 return RedirectToAction("Login", "Account");
 
             var driver = _context.Users.FirstOrDefault(u => u.Email == email);
-            if (driver == null)
-                return RedirectToAction("Login", "Account");
 
+            
             var pickups = _context.Pickups
-                .Include(p => p.Donation)   
-                .Where(p => p.DriverId == driver.Id)
+                .Include(p => p.Donation) 
+                .Where(p => p.DriverId == driver!.Id && p.Donation!.Type == "Item")
                 .ToList();
 
             return View(pickups);

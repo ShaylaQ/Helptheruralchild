@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Helptheruralchild.Models.Pickup>
+
+@{
+    ViewData["Title"] = "Assigned Pickups";
+}
+
+<h2 class="mb-4">Your Assigned Pickups</h2>
+
+@if (!Model.Any())
+{
+    <p>You have no pickups assigned.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Pickup ID</th>
+                <th>Donation Type</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Pickup Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pickup in Model)
+            {
+                <tr>
+                    <td>@pickup.Id</td>
+                    <td>@pickup.Donation?.Type</td>
+                    <td>@pickup.Donation?.Description</td>
+                    <td>@pickup.Location</td>
+                    <td>@pickup.Status</td>
+                    <td>@pickup.PickupDate.ToString("yyyy-MM-dd HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
