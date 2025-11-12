@@ -4,6 +4,8 @@
     {
         public int Id { get; set; }
         public int DonationId { get; set; }
+        public Donation? Donation { get; set; }  
+
         public int DriverId { get; set; }
         public string Location { get; set; } = string.Empty;
         public string Status { get; set; } = "Scheduled";

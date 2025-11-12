@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Helptheruralchild.Data;
 using Microsoft.EntityFrameworkCore;
+using Helptheruralchild.Data;
+using Helptheruralchild.Models;
 
 namespace Helptheruralchild.Controllers
 {
@@ -15,13 +16,16 @@ namespace Helptheruralchild.Controllers
         public IActionResult Index()
         {
             var email = HttpContext.Session.GetString("UserEmail");
-            if (email == null)
+            if (string.IsNullOrEmpty(email))
                 return RedirectToAction("Login", "Account");
 
             var driver = _context.Users.FirstOrDefault(u => u.Email == email);
+            if (driver == null)
+                return RedirectToAction("Login", "Account");
+
             var pickups = _context.Pickups
-                .Include(p => p.DonationId)
-                .Where(p => p.DriverId == driver!.Id)
+                .Include(p => p.Donation)   
+                .Where(p => p.DriverId == driver.Id)
                 .ToList();
 
             return View(pickups);
@@ -40,3 +44,4 @@ namespace Helptheruralchild.Controllers
         }
     }
 }
+

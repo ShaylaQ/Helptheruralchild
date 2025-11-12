@@ -1,18 +1,73 @@
 ﻿@model Helptheruralchild.Models.Donation
-<h2>Create Donation</h2>
 
-<form asp-action="Create" method="post">
-    <div>
-        <label>Type:</label>
-        <input asp-for="Type" required />
-    </div>
-    <div>
-        <label>Description:</label>
-        <textarea asp-for="Description" required></textarea>
-    </div>
-    <div>
-        <label>Payment Method:</label>
-        <input asp-for="PaymentMethod" />
-    </div>
-    <button type="submit">Submit Donation</button>
-</form>
+@{
+    ViewData["Title"] = "Create a Donation";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-success">Create a Donation</h2>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+       
+        <div class="mb-3">
+            <label asp-for="Type" class="form-label">Type:</label>
+            <select asp-for="Type" class="form-select" id="donationType" required>
+                <option value="">-- Select Donation Type --</option>
+                <option value="Money">Money</option>
+                <option value="Item">Item</option>
+            </select>
+            <span asp-validation-for="Type" class="text-danger"></span>
+        </div>
+
+   
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description:</label>
+            <textarea asp-for="Description" class="form-control" rows="3" placeholder="Describe your donation..." required></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+       
+        <div id="moneyDetails" style="display:none;">
+            <div class="border rounded p-3 mb-3 bg-light">
+                <h5 class="text-success">Our Banking Details</h5>
+                <p><strong>Bank:</strong> Nedbank Bank</p>
+                <p><strong>Account Name:</strong> Help The Rural Child</p>
+                <p><strong>Account Number:</strong> 123456789</p>
+                <p><strong>Branch Code:</strong> 98765</p>
+                <p><strong>Reference:</strong> Your Full Name</p>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ProofOfPayment" class="form-label">Upload Proof of Payment:</label>
+                <input asp-for="ProofOfPayment" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="ProofOfPayment" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3" id="paymentMethodDiv">
+                <label asp-for="PaymentMethod" class="form-label">Full name and Bank name:</label>
+                <input asp-for="PaymentMethod" class="form-control" placeholder="Your full name and bank name etc." />
+                <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Submit Donation</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const donationType = document.getElementById("donationType");
+        const moneyDetails = document.getElementById("moneyDetails");
+
+        donationType.addEventListener("change", function () {
+            if (this.value === "Money") {
+                moneyDetails.style.display = "block";
+            } else {
+                moneyDetails.style.display = "none";
+            }
+        });
+    </script>
+}
+
+

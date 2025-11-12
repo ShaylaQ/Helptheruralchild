@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Helptheruralchild.Models.Donation>
+
+@{
+    ViewData["Title"] = "Manage Donations";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table table-striped mt-3">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Donor</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Payment Method</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var donation in Model)
+        {
+            <tr>
+                <td>@donation.Id</td>
+                <td>@donation.DonorId</td>
+                <td>@donation.Type</td>
+                <td>@donation.Description</td>
+                <td>@donation.PaymentMethod ?? "N/A"</td>
+                <td>@donation.Status</td>
+                <td>@donation.Timestamp.ToString("dd MMM yyyy HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

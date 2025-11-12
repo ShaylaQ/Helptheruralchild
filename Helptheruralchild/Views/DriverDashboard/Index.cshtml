@@ -1,28 +1,63 @@
-﻿@{
+﻿@model IEnumerable<Helptheruralchild.Models.Pickup>
+
+@{
     Layout = "_DashboardLayout";
     ViewData["Title"] = "Driver Dashboard";
     ViewBag.Role = "Driver";
 }
 
 <div class="container">
-    <h3 class="fw-bold mb-4">Welcome, Driver </h3>
+    <h3 class="fw-bold mb-4">Welcome, Driver</h3>
 
-    <div class="row g-4">
+    <div class="row g-4 mb-4">
         <div class="col-md-6">
             <div class="card p-4 shadow-sm border-0">
                 <i class="bi bi-list-check fs-1 text-info mb-3"></i>
                 <h5>Assigned Pickups</h5>
-                <p class="text-muted small">View your assigned donation pickups and details.</p>
-                <a asp-controller="Pickup" asp-action="Assigned" class="btn btn-info text-white btn-sm">View</a>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card p-4 shadow-sm border-0">
-                <i class="bi bi-clipboard-check fs-1 text-success mb-3"></i>
-                <h5>Update Status</h5>
-                <p class="text-muted small">Update delivery progress for each assigned pickup.</p>
-                <a asp-controller="Pickup" asp-action="UpdateStatus" class="btn btn-success btn-sm">Update</a>
+                <p class="text-muted small">View your assigned donation pickups and details below.</p>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Donation Type</th>
+                    <th>Description</th>
+                    <th>Location</th>
+                    <th>Pickup Date</th>
+                    <th>Status</th>
+                    <th>Update Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pickup in Model)
+                {
+                    <tr>
+                        <td>@pickup.Donation?.Type</td>
+                        <td>@pickup.Donation?.Description</td>
+                        <td>@pickup.Location</td>
+                        <td>@pickup.PickupDate.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@pickup.Status</td>
+                        <td>
+                            <form asp-action="UpdateStatus" method="post" class="d-flex flex-column">
+                                <input type="hidden" name="pickupId" value="@pickup.Id" />
+
+                                <select name="status" class="form-select form-select-sm mb-2">
+                                    @foreach (var s in new[] { "Scheduled", "Picked Up", "Completed" })
+                                    {
+                                        <option value="@s" selected="@(pickup.Status == s ? "selected" : null)">
+                                            @s
+                                        </option>
+                                    }
+                                </select>
+
+                                <button type="submit" class="btn btn-sm btn-success">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
