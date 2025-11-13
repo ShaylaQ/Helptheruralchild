@@ -1,35 +1,95 @@
-﻿@{
+﻿@model IEnumerable<Helptheruralchild.Models.Donation>
+
+@{
     Layout = "_DashboardLayout";
     ViewData["Title"] = "Admin Dashboard";
     ViewBag.Role = "Admin";
 }
 
 <div class="container">
-    <h3 class="fw-bold mb-4">Welcome, Admin </h3>
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card p-4 shadow-sm border-0">
+    <h3 class="fw-bold mb-4">Welcome, Admin</h3>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card p-4 shadow-sm border-0 text-center">
                 <i class="bi bi-box-seam fs-1 text-primary mb-3"></i>
-                <h5>Manage Donations</h5>
-                <p class="text-muted small">Review and approve submitted donations.</p>
-                <a asp-controller="Donation" asp-action="Index" class="btn btn-primary btn-sm">View</a>
+                <h5>Total Donations</h5>
+                <h4>@ViewBag.TotalDonations</h4>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card p-4 shadow-sm border-0">
-                <i class="bi bi-truck fs-1 text-success mb-3"></i>
-                <h5>Manage Pickups</h5>
-                <p class="text-muted small">Assign and monitor drivers.</p>
-                <a asp-controller="Pickup" asp-action="Index" class="btn btn-success btn-sm">Manage</a>
+        <div class="col-md-3">
+            <div class="card p-4 shadow-sm border-0 text-center">
+                <i class="bi bi-people fs-1 text-success mb-3"></i>
+                <h5>Total Donors</h5>
+                <h4>@ViewBag.TotalDonors</h4>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card p-4 shadow-sm border-0">
-                <i class="bi bi-bar-chart-line fs-1 text-warning mb-3"></i>
-                <h5>Reports</h5>
-                <p class="text-muted small">View statistics and donation reports.</p>
-                <a asp-controller="Reports" asp-action="Index" class="btn btn-warning text-white btn-sm">Open</a>
+        <div class="col-md-3">
+            <div class="card p-4 shadow-sm border-0 text-center">
+                <i class="bi bi-truck fs-1 text-info mb-3"></i>
+                <h5>Total Drivers</h5>
+                <h4>@ViewBag.TotalDrivers</h4>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="card p-4 shadow-sm border-0 text-center">
+                <i class="bi bi-clipboard-check fs-1 text-warning mb-3"></i>
+                <h5>Total Pickups</h5>
+                <h4>@ViewBag.TotalPickups</h4>
+            </div>
+        </div>
+    </div>
+
+
+    <h4 class="fw-bold mb-3">All Donations</h4>
+
+    <div class="table-responsive shadow-sm">
+        <table class="table table-striped align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Donor</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Payment Method</th>
+                    <th>Status</th>
+                    <th>Update</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var donation in Model)
+                    {
+                        <tr>
+                            <td>@donation.Id</td>
+                            <td>@donation.Donor?.Name</td>
+                            <td>@donation.Type</td>
+                            <td>@donation.Description</td>
+                            <td>@donation.PaymentMethod</td>
+                            <td>
+                                <form asp-action="UpdateStatus" method="post" class="d-flex">
+                                    <input type="hidden" name="id" value="@donation.Id" />
+                                    <select name="status" class="form-select form-select-sm me-2">
+                                        <option value="Pending" selected="@(donation.Status == "Pending")">Pending</option>
+                                        <option value="Approved" selected="@(donation.Status == "Approved")">Approved</option>
+                                        <option value="Rejected" selected="@(donation.Status == "Rejected")">Rejected</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">Update</button>
+                                </form>
+                            </td>
+                            <td>@donation.Timestamp.ToString("yyyy-MM-dd HH:mm")</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">No donations found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>

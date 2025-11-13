@@ -17,19 +17,33 @@ namespace Helptheruralchild.Controllers
 
         public IActionResult Index()
         {
-            // Fetch all donations with donor information
             var donations = _context.Donations
-                                    .Include(d => d.Donor) // Navigation property
-                                    .OrderByDescending(d => d.Timestamp)
-                                    .ToList();
+                .Include(d => d.Donor)
+                .OrderByDescending(d => d.Timestamp)
+                .ToList();
 
-            // Pass counts to ViewBag
             ViewBag.TotalDonations = donations.Count;
             ViewBag.TotalDrivers = _context.Users.Count(u => u.Role == "Driver");
             ViewBag.TotalDonors = _context.Users.Count(u => u.Role == "Donor");
             ViewBag.TotalPickups = _context.Pickups.Count();
 
-            return View(donations); // Pass donations list as model
+            return View(donations);
+        }
+
+        
+        [HttpPost]
+        public IActionResult UpdateStatus(int id, string status)
+        {
+            var donation = _context.Donations.FirstOrDefault(d => d.Id == id);
+            if (donation == null)
+            {
+                return NotFound();
+            }
+
+            donation.Status = status;
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Logout()
