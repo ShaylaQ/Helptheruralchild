@@ -19,15 +19,14 @@ namespace Helptheruralchild.Controllers
             if (email == null)
                 return RedirectToAction("Login", "Account");
 
-            // Get donor user by email
             var donor = _context.Users.FirstOrDefault(u => u.Email == email);
             if (donor == null)
                 return RedirectToAction("Login", "Account");
 
-            // Compare int to int
+      
             var donations = _context.Donations
                                     .Where(d => d.DonorId == donor.Id)
-                                    .Include(d => d.Donor) // optional, if you want donor info
+                                    .Include(d => d.Donor) 
                                     .OrderByDescending(d => d.Timestamp)
                                     .ToList();
 
